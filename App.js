@@ -1,5 +1,5 @@
 import React, {useState,useEffect} from 'react';
-import {  Text, View,AsyncStorage ,TouchableOpacity} from 'react-native';
+import {  AsyncStorage } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import {AppLoading} from "expo";
 import * as Font from 'expo-font'
@@ -11,6 +11,8 @@ import { ApolloProvider } from '@apollo/react-hooks';
 import ApolloClient from "apollo-boost";
 import apolloClientOptions from './apollo';
 import styles from "./styles"
+import NavController from './components/NavController';
+import {AuthProvider} from "./AuthContext";
 
 export default function App() {
   const [loaded, setLoaded] = useState(false);
@@ -32,12 +34,12 @@ export default function App() {
       ...apolloClientOptions
      
     });
-    const isLoggedIn = await AsyncStorage.getItem("isLoggedIn");
-    if(isLoggedIn === null || isLoggedIn === "false"){
-      setIsLoggedIn(false);
-    }else{
-      setIsLoggedIn(true)
-    }   // isLoggedIn은 null 체크 안한상태 false 로그아웃상태 true 로그인상태
+     const isLoggedIn = await AsyncStorage.getItem("isLoggedIn")
+     if(!isLoggedIn  || isLoggedIn === "false"){
+        setIsLoggedIn(false)
+     }else{
+       setIsLoggedIn(true)
+     }
      setLoaded(true);
      setClient(client) 
     }catch(e){
@@ -48,39 +50,18 @@ export default function App() {
     preLoad();
   },[])
 
-  const logUserIn = async () => {
-    try{
-      await AsyncStorage.setItem("isLoggedIn","true")
-      setIsLoggedIn(true);
-    }catch(e){
-      console.log(e);
-    }
-  }
+  
 
-  const logUserOut = async () => {
-    try{
-      await AsyncStorage.setItem("isLoggedIn","false")
-      setIsLoggedIn(false)
-    }catch(e){
-      console.log(e)
-    }
-  }
-
-  return loaded &&client && isLoggedIn !== null ? (
+  return loaded &&client&& isLoggedIn !== null? (
     <ApolloProvider client={client}>
       <ThemeProvider theme={styles}>
-    <View style = {{flex:1, justifyContent:"center", alignItems:"center"}}>
-      {isLoggedIn === true ? (
-      <TouchableOpacity onPress= {logUserOut}>
-        <Text>Log Out</Text>
-      </TouchableOpacity>) : (
-      <TouchableOpacity onPress = {logUserIn}>
-       <Text>Log In</Text> 
-     </TouchableOpacity>)}
-    </View>
+        <AuthProvider isLoggedIn = {isLoggedIn}> 
+    <NavController/>
+    </AuthProvider>
     </ThemeProvider>
     </ApolloProvider> ): (<AppLoading/>);
   
-} // 이건 상대가 로그인 했는지 안했는지 확인하는 방법 이럴 필요까진 없으므로 삭제
-
+  }/*AuthProvider는 원래 AuthContext에서 로그인 문제를 다 처리할수 있었으나 그렇게 하면
+앱로딩이 끝나고 체크함 그리고 체크한다음 네이게이션을 보여주기 때문에 체크하는 동안은 네비게이션으로 못넘어가서 빈화면으로 
+대기하는 문제가 발생함 그렇기 때문에 여기서 체크*/
 
