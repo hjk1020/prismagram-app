@@ -10,7 +10,7 @@ margin-bottom:10px;
 const TextInput = styled.TextInput`
 background-color:${props => props.theme.greyColor};
 padding:10px;
-width : ${Constants.width /2 };
+width : ${Constants.width /1.7};
 border:2px solid ${props => props.theme.lightGreyColor};
 border-radius:4px;
 `;
@@ -22,7 +22,7 @@ const AuthInput = ({
     autoCapitalize ="none",
     onChange,
     returnKeyType="done",
-    onEndEditing = () => null,
+    onSubmitEditing = () => null,
     autoCorrect =true
 }) => (
 <Container>
@@ -33,7 +33,7 @@ const AuthInput = ({
     value = {value}
     autoCapitalize = {autoCapitalize}
     returnKeyType = {returnKeyType}
-    onEndEditing={onEndEditing}
+    onSubmitEditing={onSubmitEditing}
     autoCorrect = {autoCorrect}
     />
 </Container>)
@@ -63,7 +63,7 @@ AuthInput.propTypes = {
         "search",
         "send"
     ]),
-    onEndEditing:PropTypes.func,
+    onSubmitEditing:PropTypes.func,
     autoCorrect:PropTypes.bool
 }
 

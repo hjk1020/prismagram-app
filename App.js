@@ -14,11 +14,15 @@ import styles from "./styles"
 import NavController from './components/NavController';
 import {AuthProvider} from "./AuthContext";
 
+
+
 export default function App() {
   const [loaded, setLoaded] = useState(false);
   const [client, setClient] = useState(null)
   const [isLoggedIn , setIsLoggedIn] = useState(null);
   const preLoad = async () => {
+    
+    //여기다가 await AsyncStorage.clear(); 쓰면 강제 로그아웃됨
     try{ 
       await Font.loadAsync({
        ...Ionicons.font
@@ -29,8 +33,15 @@ export default function App() {
       cache, // 로딩을 줄여줄수 있도록 폰에 정보를 저장
       storage: AsyncStorage, // asyncStorage는 웹의 로컬스토리지랑 비슷
     });
+    
     const client = new ApolloClient({
       cache,
+      request: async operation => {
+        const token = await AsyncStorage.getItem("jwt");
+        return operation.setContext({
+          headers: { Authorization: `Bearer ${token}` }
+        });
+      },
       ...apolloClientOptions
      
     });

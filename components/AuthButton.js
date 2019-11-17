@@ -6,11 +6,12 @@ import Constants from "../Constants"
 
 const Touchable = styled.TouchableOpacity``;
 const Container = styled.View`
-background-color:${props => props.theme.blueColor};
+background-color:${props => 
+props.bgColor ? props.bgColor : props.theme.blueColor};
 padding: 10px;
 margin: 0px 50px;
 border-radius:4px;
-width : ${Constants.width /2 };
+width : ${Constants.width /1.7 };
 
 `;
 const Text = styled.Text`
@@ -19,9 +20,9 @@ text-align:center;
 font-weight:600;
 `;
 
-const AuthButton =({text,onPress,loading =false}) => (
+const AuthButton =({text,onPress,loading =false, bgColor = null}) => (
     <Touchable disabled = {loading} onPress = {onPress}>
-        <Container>
+        <Container bgColor={bgColor}>
            {loading ? <ActivityIndicator color={"white"}/> : <Text>{text}</Text>}
         </Container>
     </Touchable>

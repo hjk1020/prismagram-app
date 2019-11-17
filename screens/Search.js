@@ -9,8 +9,8 @@ const View = styled.View`
 
 const Text = styled.Text``;
 
-export default () => (
-  <View>
-    <Text>Search</Text>
-  </View>
-);
+export default class extends React.Component{
+  render(){
+    return <View><Text>Search</Text></View>
+  }
+}
