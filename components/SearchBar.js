@@ -1,10 +1,27 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput } from "react-native";
+import Constants from "../Constants";
+import styles from "../styles";
 
 
 const SearchBar = ({onChange,value,onSubmit}) =>
-<TextInput value = {value} placeholder = {"Search"}/>
+<TextInput 
+style = {{
+    width:Constants.width -40 , 
+    height: 35 , 
+    backgroundColor:styles.lightGreyColor,
+    padding:10,
+    borderRadius:5,
+    textAlign:"center"
+}}
+returnKeyType = "search"
+onChangeText = {onChange}
+onEndEditing = {onSubmit}
+value = {value} 
+placeholder = {"Search"}
+placeholderTextColor = {styles.darkGreyColor}
+/>
 
 SearchBar.propTypes = {
     onChange:PropTypes.func.isRequired,

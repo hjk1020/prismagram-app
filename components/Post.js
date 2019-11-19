@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {gql} from "apollo-boost";
 import Constants from "../Constants";
 import styles from "../styles";
+import { withNavigation } from "react-navigation";
 
 const TOGGLE_LIKE = gql`
 mutation toggleLike($postId: String!) {
@@ -42,7 +43,7 @@ font-size:12px;
 const IconsContainer = styled.View`
 
 flex-direction:row;
-margin-bottom:10px;
+margin-bottom:5px;
 `;
 
 const IconContainer = styled.View`
@@ -54,11 +55,11 @@ padding:10px;
 `;
 
 const Caption = styled.Text`
-margin:3px 0px;
+margin:5px 0px;
 `;
 
 const CommentCount = styled.Text`
-margin-top:3px;
+
 opacity:0.5;
 font-size:13px;
 `;
@@ -71,7 +72,8 @@ const Post = ({
     likeCount : likeCountProp,
     caption,
     Comments =[],
-    isLiked : isLikedProp
+    isLiked : isLikedProp,
+    navigation
     }) => {
         const [isLiked,setIsLiked] = useState(isLikedProp);
         const [likeCount, setLikeCount] = useState(likeCountProp)
@@ -98,14 +100,14 @@ const Post = ({
         <Container>
            
                 <Header>
-                <Touchable>
+                <Touchable onPress = {() =>navigation.navigate("UserDetail",{userName:user.userName})}>
                     <Image 
                     style = {{height:40, width:40,borderRadius:20}}
                     source = {{uri:user.avatar}}
                     />
 
-                </Touchable>
-                <Touchable>
+                </Touchable >
+                <Touchable onPress = {() =>navigation.navigate("UserDetail",{userName:user.userName})}>
                     <HeaderUserContainer>
                       <Bold>{user.userName}</Bold>
                       <Location>{location}</Location>
@@ -194,4 +196,4 @@ Post.propTypes = {
     createdAt:PropTypes.string.isRequired
 };
 
-export default Post;
+export default withNavigation( Post);
